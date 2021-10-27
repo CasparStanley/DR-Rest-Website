@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Records bro</title>
+
+    <!-- Get Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Get Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Include Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Use our CSS style sheet-->
+    <link rel="stylesheet" href="assets/styles.cs" />
+    <!-- Import Vue.js -->
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- Title -->
+        <div class="panel panel-primary mt-4 mb-1">
+            <h2>Records</h2>
+        </div>
+
+        <!-- GET Request -->
+        <div class="panel panel-primary mt-3 mb-4 bg-dark-blue p-2 rounded">
+            <div class="panel-heading text-light">GET Request</div>
+            <div class="panel-body">
+                <button id="getAll" class="btn btn-primary mb-2 mt-2" v-on:click="getAllRecords()">
+                    Get Records
+                </button>
+                <button class="btn btn-warning mb-2 mt-2" onclick="clearOutput1()">
+                    Clear
+                </button>
+                <div>
+                    <div class="my-custom-scrollbar my-custom-scrollbar-primary">
+                        <div class="panel-body rounded-left bg-darker-blue p-2 text-light-all" id="getResult1">
+                            <ul v-if="Records.length">
+                                <li v-for="Record in Records">
+                                    <p>
+                                        {{Record.id}}) {{Record.title}} by {{Record.artist}} - {{Record.duration}}s - Year: {{Record.publicYear}}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET Request with Parameters -->
+        <div class="panel panel-primary mt-3 mb-4 bg-dark-purple p-2 rounded">
+            <div class="panel-heading text-light">GET Request with Parameters</div>
+            <div class="panel-body">
+                <input type="text" class="form-control mb-2 mt-2" id="recordInputId" v-model="idToGetBy" placeholder="record ID..."/>
+                <button id="getById" class="btn btn-primary" v-on:click="getById(idToGetBy)">
+                    Get Records
+                </button>
+                <button class="btn btn-warning mb-2 mt-2" onclick="clearOutput2()">
+                    Clear
+                </button>
+                <div class="my-custom-scrollbar my-custom-scrollbar-primary">
+                    <div class="panel-body rounded-left bg-darker-blue p-2 text-light-all" id="getResult2">
+                        <p v-if="singleRecord">
+                            {{singleRecord.id}}) {{singleRecord.title}} by {{singleRecord.artist}} - {{singleRecord.duration}}s - Year: {{singleRecord.publicYear}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POST Request -->
+        <div class="panel panel-primary mt-3 mb-4 bg-dark-green p-2 rounded">
+            <div class="panel-heading text-light">POST Request</div>
+            <div class="panel-body">
+                <div class="d-flex">
+                   
+                            <input type="text" class="form-control" id="recordTitle" v-model="addData.title" placeholder="record Title..." />
+                            <input type="text" class="form-control" id="recordArtist" v-model="addData.artist" placeholder="record Artist..." />
+                            <input type="text" class="form-control" id="recordDuration" v-model="addData.duration" placeholder="record Duration..." />
+                            <input type="text" class="form-control" id="recordYear" v-model="addData.year" placeholder="record Year..." />
+                        
+                        <button  v-on:click="addRecord()" class="btn btn-primary ml-1">Send</button>
+                    
+                    <button class="btn btn-warning ml-1 mt-2 h-100" onclick="clearOutput3()">
+                        Clear
+                    </button>
+                </div>
+                <div class="my-custom-scrollbar my-custom-scrollbar-primary">
+                    <div class="panel-body rounded-left bg-darker-blue p-2 text-light-all" id="postResult">
+                        <p>
+                            {{addMessage}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-primary mt-3 mb-4 bg-dark-red p-2 rounded">
+            <div class="panel-heading text-light">Delete Request with Parameters</div>
+            <div class="panel-body">
+                <input type="text" class="form-control mb-2 mt-2" id="recordDeleteId" v-model="idToGetBy" placeholder="record ID..."/>
+                <button class="btn btn-primary" v-on:click="deleteRecord(idToGetBy)">
+                    Delete Record
+                </button>
+                <button class="btn btn-warning mb-2 mt-2" onclick="clearOutput2()">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Mount App -->
+    <script src="./main.js"></script>
+
+    <!-- <script>
+        const mountedApp = app.mount('#app')
+    </script> -->
+
+    <!-- JS for Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    
+    <!-- JS for Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
